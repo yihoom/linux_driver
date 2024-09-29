@@ -1,14 +1,16 @@
 #include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/init.h>
 
 static int __init chardevbase_init(void)
 {
-
+	printk("chardevbase_init\r\n");
 	return 0;
 }
 
 static void __exit chardevbase_exit(void)
 {
-
+	printk("chardevbase_exit\r\n");
 }
 
 
