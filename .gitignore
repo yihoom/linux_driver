@@ -1,1 +1,12 @@
 CharDevDriver/1_chrdevbase/chardevbaseApp
+CharDevDriver/1_chrdevbase/.chardevbase.ko.cmd
+CharDevDriver/1_chrdevbase/.chardevbase.mod.o.cmd
+CharDevDriver/1_chrdevbase/.chardevbase.o.cmd
+CharDevDriver/1_chrdevbase/chardevbase.ko
+CharDevDriver/1_chrdevbase/chardevbase.mod.c
+CharDevDriver/1_chrdevbase/chardevbase.mod.o
+CharDevDriver/1_chrdevbase/chardevbase.o
+CharDevDriver/1_chrdevbase/Module.symvers
+CharDevDriver/1_chrdevbase/modules.order
+CharDevDriver/1_chrdevbase/.tmp_versions/chardevbase.mod
+CharDevDriver/1_chrdevbase/chardevtest

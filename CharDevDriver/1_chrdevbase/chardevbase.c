@@ -2,35 +2,63 @@
 #include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/fs.h>
+#include <linux/uaccess.h>
 
 #define CHARDEVBASE_MAJOR 200			//主设备号
 #define CHARDEVNAME "chrdevbase"		//设备名
 
+static char readbuf[100];	//读缓冲
+static char writebuf[100];	//写缓冲
+static char kernealdata[] = {"kernel data"};
+
+
 static int chrdev_open(struct inode *inode, struct file *file)
 {
-	printk("chrdevbase_open\r\n");
+	// printk("chrdevbase_open\r\n");
 	return 0;
 }
 
 static int chrdev_close(struct inode *inode, struct file *file)
 {
-	printk("chrdevbase_close\r\n");
+	// printk("chrdevbase_close\r\n");
 	return 0;
 }
 
+//buf是用户空间的地址，内核不能访问
 static ssize_t chrdev_read(struct file *file,	/* file descriptor */
 				char __user *user_buf,	/* user buffer */
 				size_t len,		/* length of buffer */
 				loff_t *offset)		/* offset in the file */
 {
-	printk("chrdevbase_read\r\n");
+	// printk("chrdevbase_read\r\n");
+	int ret = 0;
+
+	memcpy(readbuf, kernealdata, sizeof(kernealdata));
+	//读取多长由应用来决定
+	ret = copy_to_user(user_buf, readbuf, len);
+	if(ret < 0)
+	{
+		printk("chrdevbase read failed\r\n");
+	}
+
 	return 0;
 }
 
 static ssize_t chrdev_write(struct file *file, const char __user *user_buf,
 			       size_t length, loff_t *offset)
 {
-	printk("chrdevbase_write\r\n");
+	// printk("chrdevbase_write\r\n");
+	int ret = 0;
+	ret = copy_from_user(writebuf, user_buf, length);
+
+	if(ret == 0)
+	{
+		printk("kernel receive date %s\r\n", writebuf);
+	}
+	else{
+		printk("write to driver failed");
+	}
+
 	return 0;
 }
 
