@@ -21,6 +21,9 @@
     "files.associations": {
         "kernel.h": "c",
         "init.h": "c",
-        "printk.h": "c"
+        "printk.h": "c",
+        "*.tcc": "c",
+        "uaccess.h": "c",
+        "io.h": "c"
     }
 }
