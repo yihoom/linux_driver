@@ -24,6 +24,7 @@
         "printk.h": "c",
         "*.tcc": "c",
         "uaccess.h": "c",
-        "io.h": "c"
+        "io.h": "c",
+        "cdev.h": "c"
     }
 }
