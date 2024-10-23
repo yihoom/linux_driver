@@ -21,3 +21,13 @@ CharDevDriver/2_led/Module.symvers
 CharDevDriver/2_led/modules.order
 CharDevDriver/2_led/.tmp_versions/led.mod
 CharDevDriver/2_led/ledAPP
+CharDevDriver/3_NewCharLed/.newcharled.ko.cmd
+CharDevDriver/3_NewCharLed/.newcharled.mod.o.cmd
+CharDevDriver/3_NewCharLed/.newcharled.o.cmd
+CharDevDriver/3_NewCharLed/Module.symvers
+CharDevDriver/3_NewCharLed/modules.order
+CharDevDriver/3_NewCharLed/newcharled.ko
+CharDevDriver/3_NewCharLed/newcharled.mod.c
+CharDevDriver/3_NewCharLed/newcharled.mod.o
+CharDevDriver/3_NewCharLed/newcharled.o
+CharDevDriver/3_NewCharLed/.tmp_versions/newcharled.mod

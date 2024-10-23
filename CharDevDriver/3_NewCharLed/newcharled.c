@@ -5,6 +5,7 @@
 #include <linux/uaccess.h>
 #include <linux/io.h>
 #include <linux/cdev.h>
+#include <linux/device.h>
 
 #define NEWCHRLEDNAME "newcheled"
 #define NEWCHRLED_CNT 1
@@ -29,6 +30,8 @@ struct newchrled_dev{
     dev_t devid;    /*设备号*/
     int major;      /*主设备号*/
     int minor;      /*此设备号*/
+    struct class *led_class;    /*类*/
+    struct device *led_dev;    /*设备*/
     struct cdev cdev;   
 };
 
@@ -152,6 +155,28 @@ static  int __init newcharled_init(void)
     cdev_init(&(newchrled.cdev), &newchrled_fops);
     ret = cdev_add(&(newchrled.cdev), newchrled.devid, NEWCHRLED_CNT);
 
+    /*4.自动创建设备节点*/
+    /*4.1 先创建类*/
+    newchrled.led_class = class_create(THIS_MODULE, NEWCHRLEDNAME);
+    if(IS_ERR(newchrled.led_class))
+    {
+        return PTR_ERR(newchrled.led_class);
+    }
+
+    // struct device *device_create(struct class *class, 
+    //     struct device *parent, 
+    //     dev_t devt, 
+    //     void *drvdata, 
+    //     const char *fmt, ...) 
+
+    /*4.2 创建设备*/
+    newchrled.led_dev = device_create(newchrled.led_class, NULL, newchrled.devid, NULL, NEWCHRLEDNAME);
+    if(IS_ERR(newchrled.led_dev))
+    {
+        return PTR_ERR(newchrled.led_dev);
+    }
+
+
     return 0;
 }
  
@@ -177,11 +202,15 @@ static  void __exit newcharled_exit(void)
     /*删除注册的设备号*/
     unregister_chrdev_region(newchrled.devid, NEWCHRLED_CNT);
     printk("newchrled exit\r\n");
+    /*删除设备*/
+    device_destroy(newchrled.led_class, newchrled.devid);
+    /*删除类*/
+    class_destroy(newchrled.led_class);
 }
  
 /*注册驱动和卸载驱动*/
 module_init(newcharled_init);
 module_exit(newcharled_exit);
-MODULE_LICENSE("GPPL");
+MODULE_LICENSE("GPL");
 MODULE_AUTHOR("JYH");
 
