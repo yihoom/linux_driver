@@ -25,6 +25,8 @@
         "*.tcc": "c",
         "uaccess.h": "c",
         "io.h": "c",
-        "cdev.h": "c"
+        "cdev.h": "c",
+        "of_irq.h": "c",
+        "type_traits": "c"
     }
 }

@@ -31,3 +31,15 @@ CharDevDriver/3_NewCharLed/newcharled.mod.c
 CharDevDriver/3_NewCharLed/newcharled.mod.o
 CharDevDriver/3_NewCharLed/newcharled.o
 CharDevDriver/3_NewCharLed/.tmp_versions/newcharled.mod
+CharDevDriver/4_dtsof/newcharled.o
+CharDevDriver/4_dtsof/newcharled.mod.o
+CharDevDriver/4_dtsof/.ofdts.ko.cmd
+CharDevDriver/4_dtsof/.ofdts.mod.o.cmd
+CharDevDriver/4_dtsof/.ofdts.o.cmd
+CharDevDriver/4_dtsof/Module.symvers
+CharDevDriver/4_dtsof/modules.order
+CharDevDriver/4_dtsof/ofdts.ko
+CharDevDriver/4_dtsof/ofdts.mod.c
+CharDevDriver/4_dtsof/ofdts.mod.o
+CharDevDriver/4_dtsof/ofdts.o
+CharDevDriver/4_dtsof/.tmp_versions/ofdts.mod

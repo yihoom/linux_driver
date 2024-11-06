@@ -62,11 +62,13 @@ static void LED_Switch(u8 sta)
 static int newled_open(struct inode *inode, struct file *file)
 {
 	// printk("chrdevbase_open\r\n");
+    file->private_data = &newchrled;
 	return 0;
 }
 
 static int newled_release(struct inode *inode, struct file *file)
 {
+    struct newchrled_dev *dev = (struct newchrled_dev *)file->private_data;
 	return 0;
 }
 
