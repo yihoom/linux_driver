@@ -43,3 +43,13 @@ CharDevDriver/4_dtsof/ofdts.mod.c
 CharDevDriver/4_dtsof/ofdts.mod.o
 CharDevDriver/4_dtsof/ofdts.o
 CharDevDriver/4_dtsof/.tmp_versions/ofdts.mod
+CharDevDriver/5_dtsled/ofled.ko
+CharDevDriver/5_dtsled/ofled.mod.c
+CharDevDriver/5_dtsled/ofled.mod.o
+CharDevDriver/5_dtsled/ofled.o
+CharDevDriver/5_dtsled/.tmp_versions/ofled.mod
+CharDevDriver/5_dtsled/modules.order
+CharDevDriver/5_dtsled/Module.symvers
+CharDevDriver/5_dtsled/.ofled.o.cmd
+CharDevDriver/5_dtsled/.ofled.mod.o.cmd
+CharDevDriver/5_dtsled/.ofled.ko.cmd
