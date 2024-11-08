@@ -133,7 +133,7 @@ static int __init dtsled_init(void)
     printk("compatible=%s\r\n", str);
     of_property_read_string(dtsled.dev_nd, "status", &str);
     printk("status=%s\r\n", str);
-    
+#if 0  
     of_property_read_u32_array(dtsled.dev_nd, "reg", regval, 10);
     
     for(i = 0; i < 10; i++)
@@ -141,12 +141,20 @@ static int __init dtsled_init(void)
         printk("reg[%d]=%d\r\n", i, regval[i]);
     }
 
+
     //LED灯初始化
     IMX6U_CCm_CCGR1 = ioremap(regval[0], regval[1]);
 	SW_MUX_GPIO1_IO03 = ioremap(regval[2], regval[3]);
 	SW_PAD_GPIO1_IO03 = ioremap(regval[4], regval[5]);
 	GPIO1_DR = ioremap(regval[6], regval[7]);
 	GPIO1_GDIR = ioremap(regval[8], regval[9]);
+#endif
+
+    IMX6U_CCm_CCGR1 = of_iomap(dtsled.dev_nd, 0);
+	SW_MUX_GPIO1_IO03 = of_iomap(dtsled.dev_nd, 1);
+	SW_PAD_GPIO1_IO03 = of_iomap(dtsled.dev_nd, 2);
+	GPIO1_DR = of_iomap(dtsled.dev_nd, 3);
+	GPIO1_GDIR = of_iomap(dtsled.dev_nd, 4);
 
     /*2.GPIO初始化*/
 	val = readl(IMX6U_CCm_CCGR1); 
