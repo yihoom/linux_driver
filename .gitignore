@@ -53,3 +53,13 @@ CharDevDriver/5_dtsled/Module.symvers
 CharDevDriver/5_dtsled/.ofled.o.cmd
 CharDevDriver/5_dtsled/.ofled.mod.o.cmd
 CharDevDriver/5_dtsled/.ofled.ko.cmd
+CharDevDriver/6_gpioled/.gpioled.ko.cmd
+CharDevDriver/6_gpioled/.gpioled.mod.o.cmd
+CharDevDriver/6_gpioled/.gpioled.o.cmd
+CharDevDriver/6_gpioled/gpioled.ko
+CharDevDriver/6_gpioled/gpioled.mod.c
+CharDevDriver/6_gpioled/gpioled.mod.o
+CharDevDriver/6_gpioled/gpioled.o
+CharDevDriver/6_gpioled/Module.symvers
+CharDevDriver/6_gpioled/modules.order
+CharDevDriver/6_gpioled/.tmp_versions/gpioled.mod
