@@ -63,3 +63,13 @@ CharDevDriver/6_gpioled/gpioled.o
 CharDevDriver/6_gpioled/Module.symvers
 CharDevDriver/6_gpioled/modules.order
 CharDevDriver/6_gpioled/.tmp_versions/gpioled.mod
+CharDevDriver/7_beep/.beep.ko.cmd
+CharDevDriver/7_beep/.beep.mod.o.cmd
+CharDevDriver/7_beep/.beep.o.cmd
+CharDevDriver/7_beep/beep.ko
+CharDevDriver/7_beep/beep.mod.c
+CharDevDriver/7_beep/beep.mod.o
+CharDevDriver/7_beep/beep.o
+CharDevDriver/7_beep/Module.symvers
+CharDevDriver/7_beep/modules.order
+CharDevDriver/7_beep/.tmp_versions/beep.mod
