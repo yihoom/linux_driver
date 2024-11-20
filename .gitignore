@@ -84,3 +84,16 @@ CharDevDriver/8_atomic/Module.symvers
 CharDevDriver/8_atomic/modules.order
 CharDevDriver/8_atomic/.tmp_versions/atomic.mod
 CharDevDriver/8_atomic/atomicAPP
+CharDevDriver/9_spinlock/.spinlock.ko.cmd
+CharDevDriver/9_spinlock/.spinlock.mod.o.cmd
+CharDevDriver/9_spinlock/.spinlock.o.cmd
+CharDevDriver/9_spinlock/Module.symvers
+CharDevDriver/9_spinlock/modules.order
+CharDevDriver/9_spinlock/spinlock.ko
+CharDevDriver/9_spinlock/spinlock.mod.c
+CharDevDriver/9_spinlock/spinlock.o
+
+CharDevDriver/*/*.o
+CharDevDriver/*/*.mod
+CharDevDriver/*/*/*.mod
+
