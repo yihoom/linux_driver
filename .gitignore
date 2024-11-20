@@ -73,3 +73,14 @@ CharDevDriver/7_beep/beep.o
 CharDevDriver/7_beep/Module.symvers
 CharDevDriver/7_beep/modules.order
 CharDevDriver/7_beep/.tmp_versions/beep.mod
+CharDevDriver/8_atomic/.atomic.ko.cmd
+CharDevDriver/8_atomic/.atomic.mod.o.cmd
+CharDevDriver/8_atomic/.atomic.o.cmd
+CharDevDriver/8_atomic/atomic.ko
+CharDevDriver/8_atomic/atomic.mod.o
+CharDevDriver/8_atomic/atomic.mod.c
+CharDevDriver/8_atomic/atomic.o
+CharDevDriver/8_atomic/Module.symvers
+CharDevDriver/8_atomic/modules.order
+CharDevDriver/8_atomic/.tmp_versions/atomic.mod
+CharDevDriver/8_atomic/atomicAPP
