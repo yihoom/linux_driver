@@ -95,5 +95,10 @@ CharDevDriver/9_spinlock/spinlock.o
 
 CharDevDriver/*/*.o
 CharDevDriver/*/*.mod
+CharDevDriver/*/*.cmd
+CharDevDriver/*/*.mod.*
+CharDevDriver/*/*.ko
+CharDevDriver/*/*.sym*
+CharDevDriver/*/*.order
 CharDevDriver/*/*/*.mod
 
