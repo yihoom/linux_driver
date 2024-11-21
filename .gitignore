@@ -102,3 +102,4 @@ CharDevDriver/*/*.sym*
 CharDevDriver/*/*.order
 CharDevDriver/*/*/*.mod
 
+CharDevDriver/11_key/keyApp
