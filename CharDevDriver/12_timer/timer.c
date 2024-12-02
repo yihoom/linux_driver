@@ -13,7 +13,10 @@
 #include <linux/of_gpio.h>
 
 #define DEV_CNT 1
-#define DEV_NAME "gpioled"
+#define DEV_NAME "gpioled_timer"
+#define CLOSE_CMD   (_IO(0xEF, 0x1))
+#define OPED_CMD    (_IO(0xEF, 0x2))
+#define SetPRD_CMD  (_IOW(0xEF, 0x3, unsigned long))
 
 struct gpioled_dev
 {
@@ -25,6 +28,9 @@ struct gpioled_dev
     struct device *device;
     struct device_node *dev_nd;
     int led_gpio;
+    int timerperiod;
+    struct timer_list timer;
+    spinlock_t lock;
     
 };
 
@@ -53,6 +59,35 @@ ssize_t gpioled_write (struct file *file, const char __user *user_buf,
     return 0;
 }
 
+static long timer_unlocked_ioctrl(struct file *filp, unsigned int cmd, unsigned long arg)
+{
+    struct gpioled_dev *dev = (struct gpioled_dev *)filp->private_data;
+    unsigned long flag;
+    int timerprd;
+
+    switch (cmd)
+    {
+    case CLOSE_CMD:
+        del_timer_sync(&dev->timer);
+        break;
+    case OPED_CMD:
+        spin_lock_irqsave(&dev->lock, flag);
+        timerprd = dev->timerperiod;
+        spin_unlock_irqrestore(&dev->lock, flag);
+        mod_timer(&dev->timer, jiffies + msecs_to_jiffies(timerprd));
+        break;
+    case SetPRD_CMD:
+        spin_lock_irqsave(&dev->lock, flag);
+        dev->timerperiod = arg;
+        spin_unlock_irqrestore(&dev->lock, flag);
+        mod_timer(&dev->timer, jiffies + msecs_to_jiffies(arg));
+        break;
+    default:
+        break;
+    }
+
+    return 0;
+} 
 
 static const struct file_operations fop =
 {
@@ -60,13 +95,33 @@ static const struct file_operations fop =
     .open = gpioled_open,
     .release = gpioled_release,
     .write = gpioled_write,
+    .unlocked_ioctl = timer_unlocked_ioctrl,
 };
 
+
+void timer_callbackfn(unsigned long arg)
+{
+    struct gpioled_dev *dev = (struct gpioled_dev *)arg;
+    static int sta = 1;
+    unsigned long flag;
+    int timerprd;
+
+    sta = !sta;
+    gpio_set_value(dev->led_gpio, sta);
+
+    /*重启定时器*/
+    spin_lock_irqsave(&dev->lock, flag);
+    timerprd = dev->timerperiod;
+    spin_unlock_irqrestore(&dev->lock, flag);
+    mod_timer(&dev->timer, jiffies + msecs_to_jiffies(timerprd));
+}
 
 static int __init gpioled_init(void)
 {
     int ret = 0;
     gpioled.major = 0;
+    /*初始化自旋锁*/
+    spin_lock_init(&gpioled.lock);
     /*注册设备号*/
     if(gpioled.major)
     {
@@ -158,6 +213,11 @@ static int __init gpioled_init(void)
     /*设置输出低电平*/
     gpio_set_value(gpioled.led_gpio, 0);
 
+    //初始化时钟
+    init_timer(&gpioled.timer);
+    gpioled.timer.function = timer_callbackfn;
+    gpioled.timer.data = (unsigned long)&gpioled;
+
     return 0;
 
 fail_setoutput:
@@ -185,6 +245,7 @@ static void __exit gpioled_exit(void)
 {
     /*关灯*/
     gpio_set_value(gpioled.led_gpio, 1);
+    del_timer_sync(&gpioled.timer);
 
     /*释放IO*/
     gpio_free(gpioled.led_gpio);

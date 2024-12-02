@@ -27,6 +27,7 @@
         "io.h": "c",
         "cdev.h": "c",
         "of_irq.h": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "slab.h": "c"
     }
 }

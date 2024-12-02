@@ -103,3 +103,4 @@ CharDevDriver/*/*.order
 CharDevDriver/*/*/*.mod
 
 CharDevDriver/11_key/keyApp
+CharDevDriver/12_timer/timerAPP
