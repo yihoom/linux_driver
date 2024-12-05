@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     char *filename;
     int fd;
     int ret;
-    int value;
+    unsigned char value;
     char writebuf;
     if(argc != 2)
     {
@@ -41,11 +41,19 @@ int main(int argc, char *argv[])
     /*2。循环读取按键指*/
     while (1)
     {
-        read(fd, &value, sizeof(value));
-        if(value == KEYVAL)
+        ret = read(fd, &value, sizeof(value));
+        if(ret < 0)
         {
-            printf("KEY Pressed, value=%d\r\n", value);
+
         }
+        else
+        {
+            if(value)
+            {
+                printf("KEY Pressed, value=%d\r\n", value);
+            }
+        }
+        
     }
     
 

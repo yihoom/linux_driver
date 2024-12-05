@@ -27,7 +27,7 @@ struct irq_keyboj
     int irqnum;             /*中断号*/
     uint8_t value;          /*键指*/
     char name[10];          /*名字*/
-    irqreturn_t (*handler)(int, void *)/*中断处理函数*/
+    irqreturn_t (*handler)(int, void *);/*中断处理函数*/
 };
 
 
@@ -41,7 +41,9 @@ struct key_dev
     struct device *device;
     struct device_node *dev_nd;
     struct irq_keyboj imx6uirq[KEY_NUM];
+    struct timer_list timer;
     atomic_t keyvalue;
+    atomic_t relesval;
 };
 
 struct key_dev key;
@@ -71,6 +73,26 @@ static ssize_t key_read(struct file *file,
 			char __user *user_buf, size_t length, loff_t *pos)
 {
     int ret = 0;
+    unsigned char keyvalue = 0;
+    unsigned char releaseval = 0;
+    struct key_dev *dev = file->private_data;
+    keyvalue = atomic_read(&dev->keyvalue);
+    releaseval = atomic_read(&dev->relesval);
+
+    if(releaseval)
+    {
+        if(keyvalue & 0x80)
+        {
+            keyvalue &= ~0x80;
+            ret = copy_to_user(user_buf, &keyvalue, sizeof(keyvalue));
+            atomic_set(&dev->relesval, 0);
+            atomic_set(&dev->keyvalue, 0);
+        }
+    }
+    else
+    {
+        ret = -EINVAL;
+    }
 
     return ret;
 }
@@ -87,21 +109,45 @@ static const struct file_operations fop =
 
 static irqreturn_t key_irqhandler(int irq, void *dev_key)
 {
-    int val = 0;
-    struct key_dev *dev = dev_key;
+    
+    struct key_dev *dev = (struct key_dev *)dev_key;
 
-    val = gpio_get_value(dev->imx6uirq[0].key_gpio);
-    if(val == 0)
-    {
-        printk("key0 pushed\r\n");
-    }
-    else if(val == 1)
-    {
-        printk("key0 relieased\r\n");
-    }
+
+    // if(val == 0)
+    // {
+    //     printk("key0 pushed\r\n");
+    // }
+    // else if(val == 1)
+    // {
+    //     printk("key0 relieased\r\n");
+    // }
+    mod_timer(&dev->timer, jiffies + msecs_to_jiffies(10));
 
     return IRQ_HANDLED;
 }
+
+void timer_callbackfn(unsigned long arg)
+{
+    int val = 0;
+    struct key_dev *dev = (struct key_dev *)arg;
+    val = gpio_get_value(dev->imx6uirq[0].key_gpio);
+
+    if(val == 0)
+    {
+        atomic_set(&key.keyvalue, 0X01);
+        // printk("key0 pushed\r\n");
+    }
+    else if(val == 1)
+    {
+        // atomic_set(&key.keyvalue, 1);
+        atomic_set(&key.keyvalue, 0x80 | 0X01);
+        atomic_set(&key.relesval, 1);
+        
+        // printk("key0 relieased\r\n");
+    }
+    // mod_timer(&dev->timer, jiffies + msecs_to_jiffies(timerprd));
+}
+
 
 static int keyio_init(struct key_dev * dev)
 {
@@ -145,7 +191,10 @@ static int keyio_init(struct key_dev * dev)
                     dev->imx6uirq[i].name, dev);
     }
 
-    
+    //初始化时钟
+    init_timer(&dev->timer);
+    dev->timer.function = timer_callbackfn;
+    dev->timer.data = (unsigned long)dev;
 
     return 0;
 
@@ -165,6 +214,9 @@ static int keyio_deinit(struct key_dev * dev)
     {
         gpio_free(dev->imx6uirq[i].key_gpio);
     }
+
+    del_timer_sync(&dev->timer);
+
     return 0;
 }
 
@@ -176,6 +228,8 @@ static int __init key_init(void)
 
     /*初始化atomic*/
     atomic_set(&key.keyvalue, INVALKEY);
+    atomic_set(&key.relesval ,INVALKEY);
+    
 
     /*注册设备号*/
     if(key.major)
