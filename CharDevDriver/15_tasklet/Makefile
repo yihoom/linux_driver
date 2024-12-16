@@ -1,7 +1,7 @@
 KERNELDIR := /home/yihoom/linux_os/nxp_linux/linux-imx-rel_imx_4.1.15_2.1.0_ga
 
 CURRENT_PATH := $(shell pwd) 
-obj-m := tasklet.o 
+obj-m := tasklet.o work.o
 
 build: kernel_modules 
 
