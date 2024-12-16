@@ -81,8 +81,24 @@ static ssize_t key_read(struct file *file,
     unsigned char releaseval = 0;
     struct key_dev *dev = file->private_data;
 
-    /*等待事件*/
-    wait_event_interruptible(dev->r_wait, atomic_read(&dev->relesval));
+    // /*等待事件*/
+    // wait_event_interruptible(dev->r_wait, atomic_read(&dev->relesval));
+
+    DECLARE_WAITQUEUE(wait, current);       //定义一个等待队列项
+    add_wait_queue(&dev->r_wait, &wait);    //添加到等等待队列头
+    __set_current_state(TASK_INTERRUPTIBLE);    //设置当前进程可被信号打断
+    schedule();     //切换
+
+    //如果是被信号唤醒的，则错误
+    if(signal_pending(current))
+    {
+        ret = -ERESTARTSYS;
+        goto data_error;
+    }
+
+    __set_current_state(TASK_RUNNING);
+    remove_wait_queue(&dev->r_wait, &wait);
+
 
     keyvalue = atomic_read(&dev->keyvalue);
     releaseval = atomic_read(&dev->relesval);
@@ -103,6 +119,12 @@ static ssize_t key_read(struct file *file,
     }
 
     return ret;
+
+data_error:
+    __set_current_state(TASK_RUNNING);
+    remove_wait_queue(&dev->r_wait, &wait);
+    return ret;
+
 }
 
 
