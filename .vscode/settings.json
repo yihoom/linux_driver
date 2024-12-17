@@ -29,6 +29,7 @@
         "of_irq.h": "c",
         "type_traits": "c",
         "slab.h": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "select.h": "c"
     }
 }

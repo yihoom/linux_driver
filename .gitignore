@@ -104,3 +104,6 @@ CharDevDriver/*/*/*.mod
 
 CharDevDriver/11_key/keyApp
 CharDevDriver/12_timer/timerAPP
+CharDevDriver/17_nonblockio/irqapp
+CharDevDriver/17_nonblockio/nonblockapp
+CharDevDriver/17_nonblockio/nonblockapp_poll
