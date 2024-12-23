@@ -30,6 +30,8 @@
         "type_traits": "c",
         "slab.h": "c",
         "typeinfo": "c",
-        "select.h": "c"
+        "select.h": "c",
+        "ide.h": "c",
+        "platform_device.h": "c"
     }
 }
